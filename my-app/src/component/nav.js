@@ -8,14 +8,17 @@ import {Link} from "react-router-dom"
 
 const useStyles = makeStyles({
   root: {
-    width: 500,
-    backgroundColor: '#FF9900',
+    height: 55,
+    width: 400,
+    backgroundColor: '#e4e4e4',
   },
 });
 
 export default function SimpleBottomNavigation() {
   const classes = useStyles();
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = React.useState(1);
+
+  let navClasses = [classes.root, 'navbar'];
 
   return (
     <BottomNavigation
@@ -24,10 +27,10 @@ export default function SimpleBottomNavigation() {
         setValue(newValue);
       }}
       showLabels
-      className={classes.root}
+      className={navClasses.join(' ')}
     >
-      <BottomNavigationAction label="Movies" component={Link} to="/movies" icon={<MovieIcon />} />
-      <BottomNavigationAction label="Suggestion" component={Link} to="/suggestion" icon={<MoodIcon />} />
+      <BottomNavigationAction label="Movies" component={Link} to="/movies?user=601" icon={<MovieIcon />} />
+      <BottomNavigationAction label="Suggestion" component={Link} to="/suggestion?user=601" icon={<MoodIcon />} />
     </BottomNavigation>
   );
 }

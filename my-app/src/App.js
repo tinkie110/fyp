@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 import SimpleBottomNavigation from './component/nav';
 import {
@@ -8,20 +8,24 @@ import {
 } from "react-router-dom"
 import SimpleCard from './component/card';
 import getSuggestion from './script/suggestion';
+import getMovies from './script/movies';
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
+        <p>Movie Recommendation App</p>
         <Router>
-          <Switch>
-            <Route path ='/movies'>
-              <Movies />
-            </Route>
-            <Route path = '/suggestion'>
-              <Suggestion userId={605} />
-            </Route>
-          </Switch>
+          <div className="content">
+            <Switch>
+              <Route path ='/movies'>
+                <Movies />
+              </Route>
+              <Route path = '/suggestion'>
+                <Suggestion />
+              </Route>
+            </Switch>
+          </div>
           <SimpleBottomNavigation />
         </Router>
       </header>
@@ -30,26 +34,60 @@ function App() {
 }
 
 function Movies() {
-  return <h2>Movies</h2>;
+  const urlParams = new URLSearchParams(window.location.search);
+  const userId = urlParams.get('user');
+
+  const [isLoading, setIsloading] = useState(true);
+  const [movies, setMovies] = useState([]);
+  const [movieIds, setMovieIds] = useState([]);
+  
+  useEffect(() => {
+    getMovies().then(result => {
+      setMovies(result[0]);
+      setMovieIds(result[1]);
+      setIsloading(false);
+    });
+  }, []);
+
+  return (
+    <div className="flexContainer" style={{ alignItems: "center", padding: '0px' }}>
+      {isLoading ? <h3 key={0}>{"Loading..."}</h3> : movies.map((s, i) => {
+        return (
+          <div className='flexItem' key={i}>
+           <SimpleCard title={s} userId={userId} movieId={movieIds[i]} />
+          </div>
+        );
+      })}
+    </div>
+  );
 }
 
-function Suggestion({userId}) {
-  const [sugg, setSugg] = useState([]);
-  const mountedRef = useRef(true);
+function Suggestion() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const userId = urlParams.get('user');
 
+  const [isLoading, setIsloading] = useState(true);
+  const [suggestions, setSuggestions] = useState([]);
+  const [movieIds, setMovieIds] = useState([]);
+  
   useEffect(() => {
-    getSuggestion(userId).then((suggestions) => {
-      console.log(suggestions);
-      let formattedSuggestions = suggestions.map((s, i) => {
-        return <SimpleCard title={s} key={i} />;
-      });
-      setSugg(formattedSuggestions);
+    getSuggestion(userId).then(result => {
+      setSuggestions(result[0]);
+      setMovieIds(result[1]);
+      setIsloading(false);
     });
-    return () => { mountedRef.current = false };
   }, [userId]);
 
   return (
-    <ul style={{ alignItems: "center", padding: '0px' }}>{ sugg }</ul>
+    <div className="flexContainer" style={{ alignItems: "center", padding: '0px' }}>
+      {isLoading ? <h3 key={0}>{"Loading..."}</h3> : suggestions.map((s, i) => {
+        return (
+          <div className='flexItem' key={i}>
+           <SimpleCard title={s} userId={userId} movieId={movieIds[i]} />
+          </div>
+        );
+      })}
+    </div>
   );
 }
 

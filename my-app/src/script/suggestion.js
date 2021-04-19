@@ -1,15 +1,12 @@
-import $ from 'jquery';
 import endpoint from './endpoint';
+import axios from "axios";
 
-export default function getSuggestion(userId) {
-    return new Promise((resolve) => {
-        $.ajax({
-            url: endpoint + "?user=" + userId,
-            contentType: "application/json",
-            dataType: "json",
-            success: function(suggestions) {
-                resolve(suggestions);
-            }
-        });
-    });
+export default async function getSuggestion(userId) {
+    try {
+        let suggestionData = await axios.get(`${endpoint}suggest?user=${userId}`);
+        return suggestionData.data;
+    } catch (error) {
+        console.log(error);
+        return [];
+    }
 }

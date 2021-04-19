@@ -1,2 +1,2 @@
-const endpoint = 'http://localhost:5000/';
+const endpoint = 'http://18.162.144.112:5000/';
 export default endpoint;

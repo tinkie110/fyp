@@ -27,9 +27,11 @@ def rating():
     user_id = int(args['user'])
     movie_id = int(args['movie'])
     rating = float(args['rating'])
+    response = jsonify('failed')
     if movie_logic.update_rating(user_id, movie_id, rating):
-        return jsonify('success')
-    else:
-        return jsonify('failed') 
+        response = jsonify('success')
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    return response
+    
 
 app.run()

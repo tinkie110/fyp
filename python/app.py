@@ -1,6 +1,6 @@
 import flask
 import movie_logic
-from flask import jsonify, request
+from flask import jsonify, request, make_response
 from flask_cors import CORS, cross_origin
 
 app = flask.Flask(__name__)
@@ -13,7 +13,7 @@ def home():
     args = request.args
     user_id = int(args['user'])
     if not validuser(user_id):
-        response = jsonify('Invalid User')
+        response = make_response("Record not found", 400)
         response.headers.add("Access-Control-Allow-Origin", "*")
         return response
     print(args)
@@ -33,7 +33,7 @@ def rating():
     print(args)
     user_id = int(args['user'])
     if not validuser(user_id):
-        response = jsonify('Invalid User')
+        response = make_response("Record not found", 400)
         response.headers.add("Access-Control-Allow-Origin", "*")
         return response
     movie_id = int(args['movie'])

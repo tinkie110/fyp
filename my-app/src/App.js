@@ -51,7 +51,7 @@ function Movies() {
 
   return (
     <div className="flexContainer" style={{ alignItems: "center", padding: '0px' }}>
-      {isLoading ? <h3 key={0}>{"Loading..."}</h3> : movies.map((s, i) => {
+      { isLoading || !movies ? <h3 key={0}>{"Loading..."}</h3> : movies.map((s, i) => {
         return (
           <div className='flexItem' key={i}>
            <SimpleCard title={s} userId={userId} movieId={movieIds[i]} />
@@ -80,7 +80,7 @@ function Suggestion() {
 
   return (
     <div className="flexContainer" style={{ alignItems: "center", padding: '0px' }}>
-      {isLoading ? <h3 key={0}>{"Loading..."}</h3> : suggestions.map((s, i) => {
+      { isLoading || !suggestions ? <h3 key={0}>{"Loading..."}</h3> : suggestions.map((s, i) => {
         return (
           <div className='flexItem' key={i}>
            <SimpleCard title={s} userId={userId} movieId={movieIds[i]} />
